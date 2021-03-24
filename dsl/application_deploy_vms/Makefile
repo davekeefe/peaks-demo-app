@@ -51,7 +51,7 @@ build:
 	$(info "Pull Calm DSL image...")
 	@ docker pull ntnx/calm-dsl
 	$(info "Start Calm DSL container...")
-	@ docker run -d -t --env-file ~/calm/env.cfg -v ~/calm/config:/root/.calm -v $(shell pwd)/dsl:/root/dsl --name calm-dsl-$(REPO_NAME) ntnx/calm-dsl
+	@ docker run -d -t --env-file ~/calm/$(BLUEPRINT_NAME)_env.cfg -v ~/calm/config:/root/.calm -v $(shell pwd)/dsl:/root/dsl --name calm-dsl-$(REPO_NAME) ntnx/calm-dsl
 	$(info "Update Calm DSL cache...")
 	@ docker exec calm-dsl-$(REPO_NAME) calm update cache
 	$(info "Create Calm DSL blueprint...")
@@ -82,12 +82,12 @@ release:
 
 clean:
 	$(info "Destroying development environment...")
-	@ docker kill calm-dsl-$(REPO_NAME)
-	@ docker rm calm-dsl-$(REPO_NAME)
 	@ docker-compose -p $(DEV_PROJECT) -f $(DEV_COMPOSE_FILE) down -v
 	@ docker-compose -p $(REL_PROJECT) -f $(REL_COMPOSE_FILE) down -v
 	$(info "Removing dangling images...")
 	@ docker images -q -f dangling=true -f label=application=$(REPO_NAME) | xargs -I ARGS docker rmi -f ARGS
+	@ docker kill calm-dsl-$(REPO_NAME)
+	@ docker rm calm-dsl-$(REPO_NAME)
 	$(info "Clean complete")
 
 tag: 
