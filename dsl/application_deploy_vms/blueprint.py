@@ -101,7 +101,11 @@ class MongoDBAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
+<<<<<<< HEAD
         AhvVmNic.NormalNic(NetworkConfig),
+=======
+        AhvVmNic.NormalNic("vLAN_327"),
+>>>>>>> a5ff2bddb52ffb5354c1e8a0f0acb12d9daadc5b
     ]
     boot_type = "BIOS"
 
@@ -201,7 +205,11 @@ class NodeJSAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
+<<<<<<< HEAD
         AhvVmNic.NormalNic(NetworkConfig),
+=======
+        AhvVmNic.NormalNic("vLAN_327"),
+>>>>>>> a5ff2bddb52ffb5354c1e8a0f0acb12d9daadc5b
     ]
     boot_type = "BIOS"
 
@@ -292,7 +300,11 @@ class NginxAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
+<<<<<<< HEAD
         AhvVmNic.NormalNic(NetworkConfig),
+=======
+        AhvVmNic.NormalNic("vLAN_327"),
+>>>>>>> a5ff2bddb52ffb5354c1e8a0f0acb12d9daadc5b
     ]
     boot_type = "BIOS"
 
