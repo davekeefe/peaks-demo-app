@@ -78,7 +78,7 @@ Centos74_Image = vm_disk_package(
 
 
 class MongoDBF5(Service):
-    """Calm DSL Service"""
+    name = "MongoDBF5"
 
     service_name = CalmVariable.Simple.string(
         "mongodb",
@@ -165,7 +165,7 @@ class MongoDBF5(Service):
 
 
 class MongoDBF5Package(Package):
-    """MongoDB F5 Package"""
+    name = "Mongo DB F5 Package"
 
     services = [ref(MongoDBF5)]
 
@@ -179,7 +179,7 @@ class MongoDBF5Package(Package):
 
 
 class MongoDBF5VM(Substrate):
-    """MongoDB F5 VM"""
+    name = "MongoDBF5VM"
 
     provider_type = "EXISTING_VM"
     provider_spec = provider_spec({"address": "0.0.0.0"})
@@ -202,7 +202,7 @@ class MongoDBF5Deployment(Deployment):
 
 
 class MongoDB(Service):
-    """MongoDB service"""
+    name = "MongoDB"
 
     dependencies = [ref(MongoDBF5Deployment)]
 
@@ -279,7 +279,7 @@ class MongoDB(Service):
 
 
 class MongoDBPackage(Package):
-    """MongoDB Package"""
+    name = "MongoDB Package"
 
     services = [ref(MongoDB)]
 
@@ -316,6 +316,8 @@ class MongoDBVM(Substrate):
     Default 1 CPU & 1 GB of memory
     1 disks 
     """
+
+    name = "MongoDBVM"
 
     provider_spec = MongoDBAhvVm
     provider_spec.name = "mongodb-vm-@@{calm_unique}@@"
@@ -496,14 +498,6 @@ class NodeJS(Service):
         CalmTask.Exec.ssh(
             name="Configure NodeJS", 
             filename="scripts/nodejs/configure_nodejs.sh", 
-            cred=NutanixCred
-        )
-    
-    @action
-    def NPMInstallation():
-        CalmTask.Exec.ssh(
-            name="Install NPM", 
-            filename="scripts/nodejs/install_npm.sh", 
             cred=NutanixCred
         )
     
@@ -981,8 +975,7 @@ class Default(Profile):
 
 
     @action
-    def ScaleOutNginx():
-        name = "Scale Out Nginx"
+    def ScaleOutNginx(name = "Scale Out Nginx"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_out(
             "@@{COUNT}@@", 
@@ -991,8 +984,7 @@ class Default(Profile):
         )
 
     @action
-    def ScaleInNginx():
-        name = "Scale In Nginx"
+    def ScaleInNginx(name = "Scale In Nginx"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_in(
             "@@{COUNT}@@", 
@@ -1001,8 +993,7 @@ class Default(Profile):
         )
 
     @action
-    def ScaleOutNodeJS():
-        name = "Scale Out NodeJS"
+    def ScaleOutNodeJS(name = "Scale Out NodeJS"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_out(
             "@@{COUNT}@@", 
@@ -1011,8 +1002,7 @@ class Default(Profile):
         )
 
     @action
-    def ScaleInNodeJS():
-        name = "Scale In NodeJS"
+    def ScaleInNodeJS(name = "Scale In NodeJS"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_in(
             "@@{COUNT}@@", 
@@ -1021,8 +1011,7 @@ class Default(Profile):
         )
 
     @action
-    def ScaleOutMongoDB():
-        name = "Scale Out MongoDB"
+    def ScaleOutMongoDB(name = "Scale Out MongoDB"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_out(
             "@@{COUNT}@@", 
@@ -1031,8 +1020,7 @@ class Default(Profile):
         )
 
     @action
-    def ScaleInMongoDB():
-        name = "Scale In MongoDB"
+    def ScaleInMongoDB(name = "Scale In MongoDB"):
         COUNT = CalmVariable.Simple.int("1", is_mandatory=True, runtime=True) 
         CalmTask.Scaling.scale_in(
             "@@{COUNT}@@", 
@@ -1041,8 +1029,7 @@ class Default(Profile):
         )
 
     @action
-    def DeploytoPrimaryF5VirtualServer():
-        name="Deploy to Primary F5 Virtual Server",
+    def DeploytoPrimaryF5VirtualServer(name="Deploy to Primary F5 Virtual Server"):
         CalmTask.Exec.escript(
             name="Set F5 Virtual Server Resource",
             filename="scripts/nginxf5/set_f5_vs_resource.py",

@@ -14,6 +14,11 @@ if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "pc_instance_ip"
 else:
     PCInstanceIP = ""
 
+if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "network_config")):
+    NetworkConfig = read_local_file("network_config")
+else:
+    NetworkConfig = ""
+
 if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "domain_name")):
     DomainName = read_local_file("domain_name")
 else:
@@ -96,7 +101,7 @@ class MongoDBAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_115"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
@@ -164,14 +169,6 @@ class NodeJS(Service):
         )
     
     @action
-    def NPMInstallation(name="NPM Installation"):
-        CalmTask.Exec.ssh(
-            name="Install NPM", 
-            filename="scripts/nodejs/install_npm.sh", 
-            cred=NutanixCred
-        )
-    
-    @action
     def NodejsMongoInstallForTesting(name="NodeJS Mongo DB Installation For Testing"):
         CalmTask.Exec.ssh(
             name="Nodejs Install Mongo", 
@@ -204,7 +201,7 @@ class NodeJSAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_115"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
@@ -295,7 +292,7 @@ class NginxAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_115"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
