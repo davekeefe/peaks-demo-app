@@ -25,10 +25,20 @@ if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "network")):
 else:
     Network = ""
 
+if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "network_config")):
+    NetworkConfig = read_local_file("network_config")
+else:
+    NetworkConfig = ""
+
 if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "domain_name")):
     DomainName = read_local_file("domain_name")
 else:
     DomainName = ""
+
+if file_exists(os.path.join(init_data["LOCAL_DIR"]["location"], "cluster_name")):
+    ClusterName = read_local_file("cluster_name")
+else:
+    ClusterName = ""
 
 NutanixPublicKey = read_local_file("nutanix_public_key")
 NutanixUser = read_local_file("nutanix_user")
@@ -298,7 +308,7 @@ class MongoDBAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_327"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
@@ -308,6 +318,7 @@ class MongoDBAhvVmResources(AhvVmResources):
 class MongoDBAhvVm(AhvVm):
 
     resources = MongoDBAhvVmResources
+    cluster = Ref.Cluster(name=ClusterName)
 
 
 class MongoDBVM(Substrate):
@@ -573,7 +584,7 @@ class NodeJSAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_327"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
@@ -583,6 +594,7 @@ class NodeJSAhvVmResources(AhvVmResources):
 class NodeJSAhvVm(AhvVm):
 
     resources = NodeJSAhvVmResources
+    cluster = Ref.Cluster(name=ClusterName)
 
 
 class NodeJSVM(Substrate):
@@ -837,7 +849,7 @@ class NginxAhvVmResources(AhvVmResources):
         AhvVmDisk.Disk.Scsi.cloneFromVMDiskPackage(Centos74_Image, bootable=True)
     ]
     nics = [
-        AhvVmNic.NormalNic("vLAN_327"),
+        AhvVmNic.NormalNic(NetworkConfig),
     ]
     boot_type = "BIOS"
 
@@ -847,6 +859,7 @@ class NginxAhvVmResources(AhvVmResources):
 class NginxAhvVm(AhvVm):
 
     resources = NginxAhvVmResources
+    cluster = Ref.Cluster(name=ClusterName)
 
 
 class NginxVM(Substrate):
